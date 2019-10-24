@@ -13,3 +13,7 @@ CREATE TABLE products (
   PRIMARY KEY (id)
 );
 SELECT*FROM products;
+
+
+--Authentication and query for user and their password 
+--SELECT*FROM user_table WHERE username = ? AND PASSWORD = pw LIMIT 1;

@@ -1,0 +1,4 @@
+function sqlStart() {
+
+    var mySQLPW= 
+}
