@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "Mohabir24",
+    password: config,
     database: "bamazon_db"
 });
 var userItemID = 0;
@@ -21,6 +21,7 @@ var userQuantity = 0;
 var SQLTableData = {};
 var SQLTableDataName = ""
 var newTableDataQuantity = 0;
+var itemName="";
 
 connection.connect(function (err) {
     if (err) throw err;
@@ -77,81 +78,51 @@ function buyBuyBuy() {
         //console.log(answer);
         userItemID = answer.itemID;
         userQuantity = answer.quantity;
-        console.log('itemID:', userItemID)
-        console.log("Below is the object belonging to that ID")
-        console.log(SQLTableData[userItemID]);
-       // console.log('SQLTableData length:', SQLTableData.length);
-        console.log("Above should be the item you selected");
-        console.log('itemID before loop:', userItemID);
+  
 
         for (i = 0; i < SQLTableData.length; i++) {
             //var b = i + 1;
             if (userItemID == SQLTableData[i].id) {
-                //console.log('SQLTableData inside the if statement of the loop:', SQLTableData);
                 userItemID = i;
-                // itemID=SQLTableData[i].id;
-                // console.log("Where are we now? We used 1");
-                //userItemID = placeholder;
-                console.log("We are right above the table data being targed with itemID");
                 console.log(SQLTableData[userItemID]);
-                console.log("We are right below the table data being targed with itemID");
 
             }
-            //console.log('This should be a countup', SQLTableData[i].id);
-
         }
-        console.log('itemID after loop', userItemID);
-        //console.log('quantity:', userQuantity)
-
-        //console.log('itemID:', itemID);
+        // console.log('itemID after loop', userItemID);
         itemName = SQLTableData[userItemID].product_name;
         console.log('itemName:', itemName);
         newTableDataQuantity = SQLTableData[userItemID].quantity - userQuantity;
         console.log('newTableDataQuantity:', newTableDataQuantity);
+        if (0>newTableDataQuantity){
+            console.log("Sorry! Insufficient quantity of reserves! Your order needs to be reduced!"); 
+        }else updateProduct(newTableDataQuantity);
 
     });
 
 
 };
-//needs to ask for id of product and how many units they would like to buy
-// function askAskAsk() {
 
-//     inquirer.prompt([
-//         {
-//             name: "itemID",
-//             message: "What is the ID of the product you want to buy? ",
 
-//             name: "quantity",
-//             message: "How many would you like?"
-//         }
-//     ]).then(function (answer) {
-//         console.log(answer);
-//         quantity = answer.quantity;
-//         itemID = answer.itemID;
-//     });
-
-// }
-
-// function updateProduct() {
-//     console.log("Updating all Rocky Road quantities...\n");
-//     var query = connection.query(
-//         "UPDATE products SET ? WHERE ?",
-//         [
-//             {
-//                 quantity: 100
-//             },
-//             {
-//                 flavor: "Rocky Road"
-//             }
-//         ],
-//         function (err, res) {
-//             if (err) throw err;
-//             console.log(res.affectedRows + " products updated!\n");
-//             // Call deleteProduct AFTER the UPDATE completes
-//             deleteProduct();
-//         }
-//     );
-// }
+function updateProduct() {
+    console.log("Updating all Rocky Road quantities...\n");
+    var query = connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                quantity: 100
+            },
+            {
+                flavor: "Rocky Road"
+            }
+        ],
+        function (err, res) {
+            if (err) throw err;
+            console.log(res.affectedRows + " products updated!\n");
+            // Call deleteProduct AFTER the UPDATE completes
+            deleteProduct();
+        }
+    );
+}
     // function checkCheckCheck() {
     //    // var query = "SELECT * FROM products top5000 WHERE ?";
     //    // connection.query(query, { artist: answer.artist }
