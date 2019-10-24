@@ -89,10 +89,11 @@ function updateProduct() {
             if (err) throw err;
             console.log("This order costs a total of $"+totalCost+". Will that be cash or credit?","\n");
             //console.log(res.affectedRows + " products updated!\n");
-            connection.end();
+            //connection.end();
             
         }
     );
+
 }
 
 //userItemID+1
