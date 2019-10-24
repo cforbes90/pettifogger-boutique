@@ -22,6 +22,8 @@ var SQLTableData = {};
 var SQLTableDataName = ""
 var newTableDataQuantity = 0;
 var itemName="";
+itemPrice=0;
+totalCost=0;
 
 connection.connect(function (err) {
     if (err) throw err;
@@ -34,22 +36,9 @@ function checkInventory() {
     console.log("Checking current inventory...", "\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        x = 1;
-        // Log all results of the SELECT statement
         SQLTableData = res;
         console.log(SQLTableData);
-        // console.log('SQLTableData 0:', SQLTableData[0]);
-        // console.log("Getting id of  first one")
-        // console.log(SQLTableData[0].id);
-
-        // console.log("Above should be id of first one")
-        if (x == SQLTableData[0].id) {
-            console.log("the data is an integer");
-        } else {
-            console.log("It must be a string");
-        }
         buyBuyBuy();
-        // connection.end();
     });
 }
 function buyBuyBuy() {
@@ -74,11 +63,13 @@ function buyBuyBuy() {
             }
         }
         itemName = SQLTableData[userItemID].product_name;
-        console.log('itemName:', itemName);
+        console.log('Item Name:', itemName,"\n");
         newTableDataQuantity = SQLTableData[userItemID].quantity - userQuantity;
-        console.log('newTableDataQuantity:', newTableDataQuantity);
+        console.log('Ordered quantity: ', userQuantity,"\n");
+        itemPrice=SQLTableData[userItemID].price;
+        totalCost=itemPrice*userQuantity;
         if (0>newTableDataQuantity){
-            console.log("Sorry! Insufficient quantity of reserves! Your order needs to be reduced!"); 
+            console.log("\n","Sorry! Insufficient quantity of reserves! Your order needs to be reduced!"); 
         }else updateProduct();
     });
 };
@@ -96,9 +87,10 @@ function updateProduct() {
         ],
         function (err, res) {
             if (err) throw err;
-            console.log(res.affectedRows + " products updated!\n");
-            // Call deleteProduct AFTER the UPDATE completes
-            //deleteProduct();
+            console.log("This order costs a total of $"+totalCost+". Will that be cash or credit?","\n");
+            //console.log(res.affectedRows + " products updated!\n");
+            connection.end();
+            
         }
     );
 }
